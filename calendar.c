@@ -7,13 +7,16 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int days[5][7] = {'\0'}; 
+int days[5][7] = {'\0'};
 const char advance = 'D', retreat = 'A', exitProgram = 'E';
 
 void refreshCalendar(int monthNum, int year); 
 
-int calculatesMonth(char op, int monthNum);
 int calculatesYear(char op, int monthNum, int yearNum);
+int calculatesMonth(char op, int monthNum);
+void calculatesDay(int monthNum, int yearNum); 
+
+char *monthSymbol(int monthNum);
 //functions prototypes
 
 int main()
@@ -26,12 +29,12 @@ int main()
         system("cls");
         refreshCalendar(monthNum, yearNum); 
 
-        printf("\n\n\n\t\t\t<- 'A'        Exit: 'E'        'D'->\n\n");
+        printf("\n\n\n\t\t\t<- 'A'        Exit: 'E'        'D' ->\n\n");
         operation = getch();
 
         operation = toupper(operation); //lowercase to uppercase
-        monthNum = calculatesMonth(operation, monthNum);
         yearNum = calculatesYear(operation, monthNum, yearNum); 
+        monthNum = calculatesMonth(operation, monthNum);
     }
 
     return 0;
@@ -39,56 +42,23 @@ int main()
 
 void refreshCalendar(int monthNum, int yearNum)
 {
-    char monthLetters[4];
+    int i, j;  
 
-    switch(monthNum)
-    {
-        case 1:
-            strcpy(monthLetters, "JAN");
-            break;
-        case 2:
-            strcpy(monthLetters, "FEB");
-            break;
-        case 3:
-            strcpy(monthLetters, "MAR");
-            break;
-        case 4:
-            strcpy(monthLetters, "APR");
-            break;
-        case 5:
-            strcpy(monthLetters, "MAY");
-            break;
-        case 6:
-            strcpy(monthLetters, "JUN");
-            break;
-        case 7:
-            strcpy(monthLetters, "JUL");
-            break;
-        case 8:
-            strcpy(monthLetters, "AUG");
-            break;
-        case 9:
-            strcpy(monthLetters, "SEP");
-            break;
-        case 10:
-            strcpy(monthLetters, "OCT");
-            break;
-        case 11:
-            strcpy(monthLetters, "NOV");
-            break;
-        case 12:
-            strcpy(monthLetters, "DEC");
-            break;
-    }
-
-    printf("\n\t\t\t\t      %s - %d", monthLetters, yearNum);
+    printf("\n\t\t\t\t      %s - %d", monthSymbol(monthNum), yearNum);
     printf("\n\t\t\t\t--------------------");
     printf("\n\t\t\t\t S  M  T  W  T  F  S");
-    printf("\n\t\t\t\t       1  2  3  4  5");
-    printf("\n\t\t\t\t 6  7  8  9 10 11 12");
-    printf("\n\t\t\t\t13 14 15 16 17 18 19");
-    printf("\n\t\t\t\t20 21 22 23 24 25 26");
-    printf("\n\t\t\t\t27 28 29 30 31      ");
+}
+
+int calculatesYear(char op, int monthNum, int yearNum)
+{
+    if(op == advance && monthNum == 12) 
+        yearNum++;
+    //if the user advanced and the month is 12, it means it's going to pass a year
+
+    if(op == retreat && monthNum == 1)
+        yearNum--;
+
+    return yearNum;
 }
 
 int calculatesMonth(char op, int monthNum)
@@ -107,14 +77,38 @@ int calculatesMonth(char op, int monthNum)
     return monthNum;
 }
 
-int calculatesYear(char op, int monthNum, int yearNum)
+char *monthSymbol(int monthNum)
 {
-    if(op == advance && monthNum == 1) 
-        yearNum++;
-    //if the user advanced and the result month is 1, it means it passed the year
+    switch(monthNum)
+    {
+        case 1:
+            return "JAN";
+        case 2:
+            return "FEB";
+        case 3:
+            return "MAR";
+        case 4:
+            return "APR";
+        case 5:
+            return "MAY";
+        case 6:
+            return "JUN";
+        case 7:
+            return "JUL";
+        case 8:
+            return "AUG";
+        case 9:
+            return "SEP";
+        case 10:
+            return "OCT";
+        case 11:
+            return "NOV";
+        case 12:
+            return "DEC";
+    }
+}
 
-    if(op == retreat && monthNum == 12)
-        yearNum--;
+void calculatesDay(int monthNum, int yearNum)
+{
 
-    return yearNum;
 }

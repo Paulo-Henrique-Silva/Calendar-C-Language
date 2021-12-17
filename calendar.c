@@ -7,36 +7,37 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int days[5][7] = {10};
+int days[5][7];
 const char advance = 'D', retreat = 'A', exitProgram = 'E';
 
-void refreshCalendar(int yearNum, int monthNum, int daysNum); 
+void refreshCalendar(int yearNum, int monthNum, int daysAmount); 
 
 int calculatesYear(char op, int monthNum, int yearNum);
 int calculatesMonth(char op, int monthNum);
 int calculatesDay(int monthNum, int yearNum); 
 
 char *monthSymbol(int monthNum);
+void assignDays(int daysAmount);
 //functions prototypes
 
 int main()
 { 
-    int monthNum = 12, yearNum = 2021, daysNum = 31; //starts at 2021/12/01 
+    int monthNum = 12, yearNum = 2021, daysAmount = 31; //starts at 2021/12/01 
     char operation = '\0';
 
     while(operation != exitProgram)
     {
         system("cls");
-        refreshCalendar(yearNum, monthNum, daysNum); 
+        refreshCalendar(yearNum, monthNum, daysAmount); 
 
-        printf("\n\n\n\t\t\t<- 'A'        Exit: 'E'        'D' ->\n\n");
+        printf("\n\n\n\t\t\t\t<- 'A'        Exit: 'E'        'D' ->\n\n");
         operation = getch();
 
         operation = toupper(operation); //lowercase to uppercase
         
         yearNum = calculatesYear(operation, monthNum, yearNum); 
         monthNum = calculatesMonth(operation, monthNum);
-        daysNum = calculatesDay(monthNum, yearNum);
+        daysAmount = calculatesDay(monthNum, yearNum);
     }
 
     
@@ -44,40 +45,30 @@ int main()
 }
 
 
-void refreshCalendar(int yearNum, int monthNum, int daysNum)
+void refreshCalendar(int yearNum, int monthNum, int daysAmount)
 {
-    int i, j, k = 1; 
+    int i, j;
 
-    
-    for(i = 0; i < 5; i++)
-    {
-        for(j = 0; j < 7; j++)
-        {
-            if(k <= daysNum)
-            {
-                days[i][j] = k;
-                k++;
-            }
-            else
-                days[i][j] = '\0';
-        }
-    }
+    assignDays(daysAmount); 
 
-    printf("\n\t\t\t\t      %s - %d", monthSymbol(monthNum), yearNum);
-    printf("\n\t\t\t\t--------------------");
-    printf("\n\t\t\t\t S  M  T  W  T  F  S");
+    printf("\n\t\t\t\t\t     %s - %d", monthSymbol(monthNum), yearNum);
+    printf("\n\t\t\t\t-------------------------------------");
+    printf("\n\t\t\t\t SUN  MON  TUE  WED  THU  FRI  SAT");
 
     for(i = 0; i < 5; i++)
     {
-        printf("\n\t\t\t\t ");
+        printf("\n\t\t\t\t  ");
         for(j = 0; j < 7; j++)
         {
-            if(days[i][j] > 9)
-                printf("%d ", days[i][j]);
+            if(days[i][j] == 0)
+                printf("  ", days[i][j]);
+            else if(days[i][j] > 9)
+                printf("%d   ", days[i][j]);
             else
-                printf("%d  ", days[i][j]);
+                printf("%d    ", days[i][j]);
         }
     }
+    //print days
 }
 
 int calculatesYear(char op, int monthNum, int yearNum)
@@ -91,9 +82,11 @@ int calculatesYear(char op, int monthNum, int yearNum)
 
     if(yearNum == 1900)
         yearNum = 1901;
+    //1900 is the MIN year
     
     if(yearNum == 2100)
         yearNum = 2099;
+    //MAX year
 
     return yearNum;
 }
@@ -113,6 +106,50 @@ int calculatesMonth(char op, int monthNum)
 
     return monthNum;
 }
+
+int calculatesDay(int monthNum, int yearNum)
+{
+    int i;
+
+    if(monthNum != 2)
+    {
+        //31 days month
+        i = 1;
+        while(i <= 12)
+        {
+            if(monthNum == i)
+                return 31; 
+
+            if(i == 7)
+                i++;
+            else
+                i+=2;
+        }
+        //the months with 31 days are: jan, mar, may, jul, aug, oct and dec
+        //the last loop will pass by the values of each month
+        //if the month matches, it means it has 31 days
+
+        //30 days month
+        i = 4;
+        while(i <= 12)
+        {
+            if(monthNum == i)
+                return 30; 
+
+            if(i == 6)
+                i+=3;
+            else
+                i+=2;
+        }
+    }
+    else
+    {
+        if(yearNum % 4 == 0) //leap year
+            return 29;
+        else
+            return 28; //normal feb
+    }
+} 
 
 char *monthSymbol(int monthNum)
 {
@@ -144,44 +181,24 @@ char *monthSymbol(int monthNum)
             return "DEC";
     }
 }
+//returns the month abbreviation
 
-
-int calculatesDay(int monthNum, int yearNum)
+void assignDays(int daysAmount)
 {
-    int i;
+    int i, j, k = 1; 
 
-    if(monthNum != 2)
+    for(i = 0; i < 5; i++)
     {
-        //31 days month
-        i = 1;
-        while(i <= 12)
+        for(j = 0; j < 7; j++)
         {
-            if(monthNum == i)
-                return 31; 
-
-            if(i == 7)
-                i++;
+            if(k <= daysAmount)
+            {
+                days[i][j] = k;
+                k++;
+            }
             else
-                i+=2;
+                days[i][j] = 0;
         }
-
-        i = 4;
-        while(i <= 12)
-        {
-            if(monthNum == i)
-                return 30; 
-
-            if(i == 6)
-                i+=3;
-            else
-                i+=2;
-        }
-    }
-    else
-    {
-        if(yearNum % 4 == 0) //leap year
-            return 29;
-        else
-            return 28; //normal feb
-    }
-} 
+    } 
+}
+//assign days based in number of days in that month

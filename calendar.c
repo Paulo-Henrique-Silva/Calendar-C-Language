@@ -8,7 +8,7 @@
 #include <ctype.h>
 
 int days[6][7];
-const char ADVANCE = 'D', RETREAT = 'A', EXITPROGRAM = 'E';
+const char ADVANCE = 'D', RETREAT = 'A', EXITPROGRAM = 'E', CHANGE = 'Q';
 
 enum months 
 {
@@ -16,7 +16,7 @@ enum months
     october, november, december
 };
 
-void refreshCalendar(int daysAmount, int monthNum, int yearNum); 
+void refreshMonth(int daysAmount, int monthNum, int yearNum); 
 
 int calculatesYear(char op, int monthNum, int yearNum);
 int calculatesMonth(char op, int monthNum);
@@ -35,10 +35,10 @@ int main()
 
     while(operation != EXITPROGRAM)
     {
-        system("cls");
-        refreshCalendar(daysAmount, monthNum, yearNum); 
+        system("cls");       
+        refreshMonth(daysAmount, monthNum, yearNum); 
 
-        printf("\n\n\n\t\t\t<- A        Exit - E / Change View - Q        D ->\n\n");
+        printf("\n\n\n\t\t\t\t<- A          Exit - E          D ->\n\n");
         operation = getch();
 
         operation = toupper(operation); //lowercase to uppercase
@@ -52,8 +52,7 @@ int main()
     return 0;
 }
 
-
-void refreshCalendar(int daysAmount, int monthNum, int yearNum)
+void refreshMonth(int daysAmount, int monthNum, int yearNum)
 {
     int i, j;
 
@@ -212,7 +211,6 @@ void assignDays(int daysAmount, int monthNum, int yearNum)
     } 
 }
 //assigns days based in number of days in that month 
-
 
 int firstDay_ofWeek_inMonth(int monthNum, int yearNum)
 {

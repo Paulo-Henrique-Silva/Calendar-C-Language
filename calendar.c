@@ -38,7 +38,7 @@ int main()
         system("cls");
         refreshCalendar(daysAmount, monthNum, yearNum); 
 
-        printf("\n\n\n\t\t\t\t<- 'A'        Exit: 'E'        'D' ->\n\n");
+        printf("\n\n\n\t\t\t<- A        Exit - E / Change View - Q        D ->\n\n");
         operation = getch();
 
         operation = toupper(operation); //lowercase to uppercase
